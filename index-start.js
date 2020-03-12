@@ -46,6 +46,7 @@ window.onload = function() {
   form.onsubmit = addData;
   // Define the addData() function
   function addData(e) {
+    console.log("addData");
     // prevent default - we don't want the form to submit in the conventional way
     e.preventDefault();
 
@@ -80,6 +81,7 @@ window.onload = function() {
   }
   // Define the displayData() function
   function displayData() {
+    console.log("displayData");
     // Here we empty the contents of the list element each time the display is updated
     // If you didn't do this, you'd get duplicates listed each time a new note is added
     while (list.firstChild) {
