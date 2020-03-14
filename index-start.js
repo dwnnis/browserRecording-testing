@@ -1,3 +1,18 @@
+//
+// Recording Setup
+//
+
+//webkitURL is deprecated but nevertheless
+URL = window.URL || window.webkitURL;
+
+var gumStream; 						//stream from getUserMedia()
+var rec; 							//Recorder.js object
+var input; 							//MediaStreamAudioSourceNode we'll be recording
+
+// shim for AudioContext when it's not avb.
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioContext; //audio context to help us record
+
 // Create needed constants
 const list = document.querySelector('ul');
 const titleInput = document.querySelector('#title');
