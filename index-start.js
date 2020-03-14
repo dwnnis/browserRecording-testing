@@ -3,7 +3,18 @@ const list = document.querySelector('ul');
 const titleInput = document.querySelector('#title');
 const bodyInput = document.querySelector('#body');
 const form = document.querySelector('form');
-const submitBtn = document.querySelector('form button');
+// const submitBtn = document.querySelector('form button');
+const submitBtn = document.getElementById('createButton');
+
+// record buttons
+var recordButton = document.getElementById("recordButton");
+var stopButton = document.getElementById("stopButton");
+
+recordButton.addEventListener("click", startRecording);
+stopButton.addEventListener("click", stopRecording);
+
+// audio file
+var blobToSave;
 
 // Create an instance of a db object for us to store the open database in
 let db;
@@ -39,6 +50,7 @@ window.onload = function() {
     // Define what data items the objectStore will contain
     objectStore.createIndex('title', 'title', { unique: false });
     objectStore.createIndex('body', 'body', { unique: false });
+    objectStore.createIndex('audio', 'audio', { unique: false });
 
     console.log('Database setup complete');
   };
@@ -51,7 +63,7 @@ window.onload = function() {
     e.preventDefault();
 
     // grab the values entered into the form fields and store them in an object ready for being inserted into the DB
-    let newItem = { title: titleInput.value, body: bodyInput.value };
+    let newItem = { title: titleInput.value, body: bodyInput.value, audio: blobToSave };
 
     // open a read/write db transaction, ready for adding the data
     let transaction = db.transaction(['notes_os'], 'readwrite');
@@ -65,6 +77,7 @@ window.onload = function() {
       // Clear the form, ready for adding the next entry
       titleInput.value = '';
       bodyInput.value = '';
+      // TODO: add audio item here.
     };
 
     // Report on the success of the transaction completing, when everything is done
@@ -102,9 +115,17 @@ window.onload = function() {
         const listItem = document.createElement('li');
         const h3 = document.createElement('h3');
         const para = document.createElement('p');
+        const au = document.createElement('audio');
+
+        au.controls = true;
+        au.setAttribute("style", "width: 260px; height: 40px;")
+        var url = URL.createObjectURL(cursor.value.audio);
+      	au.src = url;
 
         listItem.appendChild(h3);
         listItem.appendChild(para);
+        listItem.appendChild(au);
+        // add audio item here.
         list.appendChild(listItem);
 
         // Put the data from the cursor inside the h3 and para
@@ -165,5 +186,70 @@ window.onload = function() {
       }
     };
   }
-
 };
+
+var constraints = { audio: true, video:false };
+function startRecording() {
+  // currentTimestamp = player.getCurrentTime();
+  // player.pauseVideo();
+  console.log("recordButton clicked");
+
+  recordButton.disabled = true;
+  stopButton.disabled = false;
+
+  navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+    console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+
+    audioContext = new AudioContext();
+    gumStream = stream;
+    input = audioContext.createMediaStreamSource(stream);
+
+    rec = new Recorder(input,{numChannels:1});
+    rec.record()
+
+    console.log("Recording started");
+
+  }).catch(function(err) {
+      //enable the record button if getUserMedia() fails
+      console.log("failed start recording");
+      console.log(err);
+      recordButton.disabled = false;
+      stopButton.disabled = true;
+  });
+}
+
+function stopRecording() {
+  console.log("stopButton clicked");
+
+  //disable the stop button, enable the record too allow for new recordings
+  stopButton.disabled = true;
+  recordButton.disabled = false;
+
+  rec.stop();
+  gumStream.getAudioTracks()[0].stop();
+
+  rec.exportWAV(createDownloadLink);
+}
+function createDownloadLink(blob) {
+  var url = URL.createObjectURL(blob);
+  console.log(url);
+  var au = document.createElement('audio');
+  var navBtn = document.createElement('button')
+  var li = document.createElement('li');
+  var link = document.createElement('a');
+
+  //   name of .wav file to use during upload and download (without extendion)
+  var filename = new Date().toLocaleString("en-US", {timeZone: "America/Chicago"});
+
+  //   save to disk link
+  link.href = url;
+  link.download = filename+".wav"; //download forces the browser to donwload the file using the  filename
+  link.innerHTML = filename;
+  li.appendChild(link);
+  recordingsList.appendChild(li);
+
+  //    what should be done here:
+  //    1. save the blob in a global variable.
+  //    2. go to addData() function and enable submitting audio item for storage.
+  blobToSave = blob;
+}

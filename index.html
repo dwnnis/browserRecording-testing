@@ -5,6 +5,7 @@
     <title>IndexedDB demo</title>
     <link href="style.css" rel="stylesheet">
     <script src="index-start.js" defer></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
   </head>
   <body>
     <header>
@@ -29,10 +30,15 @@
             <label for="body">Note text</label>
             <input id="body" type="text" required>
           </div>
+          <ol id="recordingsList"></ol>
           <div>
-            <button>Create new note</button>
+            <button id="createButton">Create new note</button>
           </div>
         </form>
+        <div>
+          <button id="recordButton">Record</button>
+          <button id="stopButton">Stop</button>
+        </div>
       </section>
     </main>
 
