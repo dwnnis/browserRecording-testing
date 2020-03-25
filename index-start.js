@@ -305,6 +305,9 @@ function createDownloadLink(blob) {
   var li = document.createElement('li');
   var link = document.createElement('a');
 
+  // send the audio file to speech recognition.
+  websocket.send(blob);
+
   //   name of .wav file to use during upload and download (without extendion)
   var filename = new Date().toLocaleString("en-US", {timeZone: "America/Chicago"});
 
