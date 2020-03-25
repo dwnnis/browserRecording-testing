@@ -25,8 +25,9 @@ const submitBtn = document.getElementById('createButton');
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
 
-recordButton.addEventListener("click", startRecording);
-stopButton.addEventListener("click", stopRecording);
+recordButton.addEventListener("mousedown", startRecording);
+recordButton.addEventListener("mouseup", stopRecording);
+// stopButton.addEventListener("click", stopRecording);
 
 // audio file
 var blobToSave;
@@ -209,8 +210,8 @@ function startRecording() {
   // player.pauseVideo();
   console.log("recordButton clicked");
 
-  recordButton.disabled = true;
-  stopButton.disabled = false;
+  // recordButton.disabled = true;
+  // stopButton.disabled = false;
 
   navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
     console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
@@ -237,8 +238,8 @@ function stopRecording() {
   console.log("stopButton clicked");
 
   //disable the stop button, enable the record too allow for new recordings
-  stopButton.disabled = true;
-  recordButton.disabled = false;
+  // stopButton.disabled = true;
+  // recordButton.disabled = false;
 
   rec.stop();
   gumStream.getAudioTracks()[0].stop();
