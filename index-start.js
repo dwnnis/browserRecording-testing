@@ -30,20 +30,21 @@ recordButton.addEventListener("pointerup", detectRelease);
 // stopButton.addEventListener("click", stopRecording);
 
 function detectClick(event) {
-
+    if (event) {
+      stopButton.innerHTML = "click";
+    }
     switch(event.pointerType) {
-        stopButton.innerHTML = "click";
         case "mouse":
             /* mouse input detected */
-            // stopButton.innerHTML = "mouse click";
+            stopButton.innerHTML = "mouse click";
             break;
         case "pen":
             /* pen/stylus input detected */
-            // stopButton.innerHTML = "pen click"
+            stopButton.innerHTML = "pen click"
             break;
         case "touch":
             /* touch input detected */
-            // stopButton.innerHTML = "touch click";
+            stopButton.innerHTML = "touch click";
             break;
         default:
             /* pointerType is empty (could not be detected)
@@ -51,24 +52,26 @@ function detectClick(event) {
     }
 }
 function detectRelease(event) {
-    stopButton.innerHTML = "release";
-    switch(event.pointerType) {
-        case "mouse":
-            /* mouse input detected */
-            // stopButton.innerHTML = "mouse release";
-            break;
-        case "pen":
-            /* pen/stylus input detected */
-            // stopButton.innerHTML = "pen release"
-            break;
-        case "touch":
-            /* touch input detected */
-            // stopButton.innerHTML = "touch release";
-            break;
-        default:
-            /* pointerType is empty (could not be detected)
-            or UA-specific custom type */
+    if (event) {
+        stopButton.innerHTML = "release";
     }
+    // switch(event.pointerType) {
+    //     case "mouse":
+    //         /* mouse input detected */
+    //         stopButton.innerHTML = "mouse release";
+    //         break;
+    //     case "pen":
+    //         /* pen/stylus input detected */
+    //         stopButton.innerHTML = "pen release"
+    //         break;
+    //     case "touch":
+    //         /* touch input detected */
+    //         stopButton.innerHTML = "touch release";
+    //         break;
+    //     default:
+    //         /* pointerType is empty (could not be detected)
+    //         or UA-specific custom type */
+    // }
 }
 
 // audio file
