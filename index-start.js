@@ -25,8 +25,8 @@ const submitBtn = document.getElementById('createButton');
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
 
-recordButton.addEventListener("mousedown", startRecording);
-recordButton.addEventListener("mouseup", stopRecording);
+recordButton.addEventListener("pointerdown", startRecording);
+recordButton.addEventListener("pointerup", stopRecording);
 // stopButton.addEventListener("click", stopRecording);
 
 // audio file
