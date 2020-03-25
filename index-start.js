@@ -25,9 +25,48 @@ const submitBtn = document.getElementById('createButton');
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
 
-recordButton.addEventListener("pointerdown", startRecording);
-recordButton.addEventListener("pointerup", stopRecording);
+recordButton.addEventListener("pointerdown", detectClick);
+recordButton.addEventListener("pointerup", detectRelease);
 // stopButton.addEventListener("click", stopRecording);
+
+function detectClick(event) {
+    switch(event.pointerType) {
+        case "mouse":
+            /* mouse input detected */
+            stopButton.innerHTML = "mouse click";
+            break;
+        case "pen":
+            /* pen/stylus input detected */
+            stopButton.innerHTML = "pen click"
+            break;
+        case "touch":
+            /* touch input detected */
+            stopButton.innerHTML = "touch click";
+            break;
+        default:
+            /* pointerType is empty (could not be detected)
+            or UA-specific custom type */
+    }
+}
+function detectRelease(event) {
+    switch(event.pointerType) {
+        case "mouse":
+            /* mouse input detected */
+            stopButton.innerHTML = "mouse release";
+            break;
+        case "pen":
+            /* pen/stylus input detected */
+            stopButton.innerHTML = "pen release"
+            break;
+        case "touch":
+            /* touch input detected */
+            stopButton.innerHTML = "touch release";
+            break;
+        default:
+            /* pointerType is empty (could not be detected)
+            or UA-specific custom type */
+    }
+}
 
 // audio file
 var blobToSave;
