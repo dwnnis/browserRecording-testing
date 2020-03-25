@@ -21,6 +21,9 @@ header, footer {
 .new-note {
   background: #ddd;
 }
+.my-button:before {
+  content: "Close";
+}
 
 h1 {
   margin: 0;
