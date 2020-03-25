@@ -25,31 +25,31 @@ const submitBtn = document.getElementById('createButton');
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
 
-recordButton.addEventListener("pointerdown", detectClick);
-recordButton.addEventListener("pointerup", detectRelease);
+recordButton.addEventListener("pointerdown", startRecording);
+recordButton.addEventListener("pointerup", stopRecording);
 // stopButton.addEventListener("click", stopRecording);
 
 function detectClick(event) {
     if (event) {
-      stopButton.innerHTML = "click";
+      stopButton.innerHTML = event.pointerType;
     }
-    switch(event.pointerType) {
-        case "mouse":
-            /* mouse input detected */
-            stopButton.innerHTML = "mouse click";
-            break;
-        case "pen":
-            /* pen/stylus input detected */
-            stopButton.innerHTML = "pen click"
-            break;
-        case "touch":
-            /* touch input detected */
-            stopButton.innerHTML = "touch click";
-            break;
-        default:
-            /* pointerType is empty (could not be detected)
-            or UA-specific custom type */
-    }
+    // switch(event.pointerType) {
+    //     case "mouse":
+    //         /* mouse input detected */
+    //         stopButton.innerHTML = "mouse click";
+    //         break;
+    //     case "pen":
+    //         /* pen/stylus input detected */
+    //         stopButton.innerHTML = "pen click"
+    //         break;
+    //     case "touch":
+    //         /* touch input detected */
+    //         stopButton.innerHTML = "touch click";
+    //         break;
+    //     default:
+    //         /* pointerType is empty (could not be detected)
+    //         or UA-specific custom type */
+    // }
 }
 function detectRelease(event) {
     if (event) {
@@ -250,48 +250,52 @@ window.onload = function() {
 };
 
 var constraints = { audio: true, video:false };
-function startRecording() {
-  // currentTimestamp = player.getCurrentTime();
-  // player.pauseVideo();
-  console.log("recordButton clicked");
-  stopButton.innerHTML = "recordButton clicked";
+function startRecording(event) {
+  if(event) {
+    // currentTimestamp = player.getCurrentTime();
+    // player.pauseVideo();
+    console.log("recordButton clicked");
+    stopButton.innerHTML = event.pointerType;
 
-  // recordButton.disabled = true;
-  // stopButton.disabled = false;
+    // recordButton.disabled = true;
+    // stopButton.disabled = false;
 
-  navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-    console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+      console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
 
-    audioContext = new AudioContext();
-    gumStream = stream;
-    input = audioContext.createMediaStreamSource(stream);
+      audioContext = new AudioContext();
+      gumStream = stream;
+      input = audioContext.createMediaStreamSource(stream);
 
-    rec = new Recorder(input,{numChannels:1});
-    rec.record()
+      rec = new Recorder(input,{numChannels:1});
+      rec.record()
 
-    console.log("Recording started");
+      console.log("Recording started");
 
-  }).catch(function(err) {
-      //enable the record button if getUserMedia() fails
-      console.log("failed start recording");
-      console.log(err);
-      recordButton.disabled = false;
-      stopButton.disabled = true;
-  });
+    }).catch(function(err) {
+        //enable the record button if getUserMedia() fails
+        console.log("failed start recording");
+        console.log(err);
+        recordButton.disabled = false;
+        stopButton.disabled = true;
+    });
+  }
 }
 
-function stopRecording() {
-  console.log("stopButton clicked");
-  stopButton.innerHTML = "stopButton clicked";
+function stopRecording(event) {
+  if(event) {
+    console.log("stopButton clicked");
+    stopButton.innerHTML = event.pointerType;
 
-  //disable the stop button, enable the record too allow for new recordings
-  // stopButton.disabled = true;
-  // recordButton.disabled = false;
+    //disable the stop button, enable the record too allow for new recordings
+    // stopButton.disabled = true;
+    // recordButton.disabled = false;
 
-  rec.stop();
-  gumStream.getAudioTracks()[0].stop();
+    rec.stop();
+    gumStream.getAudioTracks()[0].stop();
 
-  rec.exportWAV(createDownloadLink);
+    rec.exportWAV(createDownloadLink);
+  }
 }
 function createDownloadLink(blob) {
   var url = URL.createObjectURL(blob);
