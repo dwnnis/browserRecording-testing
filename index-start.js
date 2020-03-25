@@ -209,6 +209,7 @@ function startRecording() {
   // currentTimestamp = player.getCurrentTime();
   // player.pauseVideo();
   console.log("recordButton clicked");
+  stopButton.innerHTML = "recordButton clicked";
 
   // recordButton.disabled = true;
   // stopButton.disabled = false;
@@ -236,6 +237,7 @@ function startRecording() {
 
 function stopRecording() {
   console.log("stopButton clicked");
+  stopButton.innerHTML = "stopButton clicked";
 
   //disable the stop button, enable the record too allow for new recordings
   // stopButton.disabled = true;
