@@ -29,6 +29,15 @@ recordButton.addEventListener("pointerdown", startRecording);
 recordButton.addEventListener("pointerup", stopRecording);
 // stopButton.addEventListener("click", stopRecording);
 
+navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(function(stream) {
+        console.log('You let me use your mic!')
+      })
+      .catch(function(err) {
+        console.log('No mic for you!')
+      });
+
+
 function detectClick(event) {
     if (event) {
       stopButton.innerHTML = event.pointerType;
